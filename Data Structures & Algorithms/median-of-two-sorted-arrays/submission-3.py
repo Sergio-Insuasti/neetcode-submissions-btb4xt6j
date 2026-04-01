@@ -1,0 +1,33 @@
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        A, B = nums1, nums2
+        total = len(A) + len(B)
+        # half of what would be the merged array
+        half = total//2
+        # make A the smaller of the two arrays
+        if len(B) < len(A):
+            A, B = B, A
+
+        # set l, r for binary search
+        l, r = 0, len(A) - 1
+
+        while True:
+            i = (l + r)//2 #A
+            j = half - i - 2 #B
+
+            # checks for if i or j ever go out of bounds
+            Aleft = A[i] if i >= 0 else -float('inf')
+            Aright = A[i+1] if (i+1) < len(A) else float('inf')
+            Bleft = B[j] if j >= 0 else -float('inf')
+            Bright = B[j+1] if (j+1) < len(B) else float('inf')
+
+            # check partition is correct
+            if Aleft <= Bright and Bleft <= Aright:
+                if total % 2 == 1:
+                    return min(Aright, Bright)
+                else:
+                    return (max(Aleft, Bleft) + min(Aright, Bright)) / 2.0
+            elif Aleft > Bright:
+                r = i - 1
+            else:
+                l = i + 1

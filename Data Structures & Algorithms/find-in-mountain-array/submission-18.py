@@ -1,0 +1,43 @@
+class Solution:
+    def findInMountainArray(self, target: int, mountainArr: 'MountainArray') -> int:
+        def binSearch(l, r, ascending=True):
+            if ascending:
+                while l <= r:
+                    m = (l + r)//2
+                    val = mountainArr.get(m)
+                    if val == target:
+                        return m
+                    if val > target:
+                        r = m - 1
+                    else:
+                        l = m + 1
+                return -1
+            else:
+                while l <= r:
+                    m = (l + r)//2
+                    val = mountainArr.get(m)
+                    if val == target:
+                        return m
+                    if val > target:
+                        l = m + 1
+                    else:
+                        r = m - 1
+                return -1
+
+        n = mountainArr.length()
+
+        l, r = 0, n - 1
+        while l < r:
+            m = (l + r) // 2
+            if mountainArr.get(m) < mountainArr.get(m + 1):
+                l = m + 1
+            else:
+                r = m
+        peak = l
+
+        print(peak)
+
+        res = binSearch(0, peak)
+        if res == -1:
+            return binSearch(peak + 1, n - 1, False)
+        return res
